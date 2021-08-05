@@ -10,7 +10,7 @@ from PIL import ImageGrab
 import pokerfrog as pf
 
 
-def get_games_screenshoots():
+def get_games_screenshoots(auto_popup=False):
     """Return dict with Pillow images for every opened window with game."""
     winlist = []
     def enum_cb(hwnd, results):
@@ -34,7 +34,8 @@ def get_games_screenshoots():
         )
         bbox = (rect.left, rect.top, rect.right, rect.bottom)
 
-        win32gui.SetForegroundWindow(hwnd)
+        if auto_popup:
+            win32gui.SetForegroundWindow(hwnd)
         time.sleep(0.05)
         res[(hwnd, title)] = ImageGrab.grab(bbox)
 
@@ -48,14 +49,15 @@ if __name__ == '__main__':
     while True:
         try:
             for ((hwnd, title), screen) in get_games_screenshoots().items():
-                time.sleep(0.6)
+                time.sleep(0.7)
                 hand, table = pf.vision.get_hand_and_table(screen)
 
                 if last_hand != hand or last_table != table:
                     last_hand, last_table = hand, table
+                    print('\n'*50, flush=True)
                     print('State:', pf.metrics.get_game_state(table))
                     print('Hand:', hand)
+                    print('Hand Score:', pf.metrics.get_hutchinson_score(hand))
                     print('Table:', table)
-                    print(flush=True)
         except:
             pass
