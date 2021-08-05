@@ -42,7 +42,9 @@ def get_games_screenshoots():
 
 
 if __name__ == '__main__':
+    # TODO: Separate track last onew for each game
     last_hand, last_table = None, None
+
     while True:
         try:
             for ((hwnd, title), screen) in get_games_screenshoots().items():
@@ -51,8 +53,9 @@ if __name__ == '__main__':
 
                 if last_hand != hand or last_table != table:
                     last_hand, last_table = hand, table
-                    print("Hand:", hand)
-                    print("Table:", table)
-                    print()
+                    print('State:', pf.metrics.get_game_state(table))
+                    print('Hand:', hand)
+                    print('Table:', table)
+                    print(flush=True)
         except:
             pass

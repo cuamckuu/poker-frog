@@ -1,6 +1,7 @@
 """Module to implement domain classes."""
 
 import dataclasses
+import enum
 
 CARD_VALUES = [
     '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A',
@@ -24,3 +25,13 @@ class Card:
         }[self.suit]
 
         return f'[{self.value} {suit}]'
+
+
+class GameState(enum.Enum):
+    """Enum to represent game state."""
+
+    PREFLOP = 'preflop'
+    FLOP = 'flop'
+    TURN = 'turn'
+    RIVER = 'river'
+    UNKNOWN = 'unknown'
